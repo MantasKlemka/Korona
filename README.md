@@ -36,7 +36,7 @@ Sistemos sudedamosios dalys:
 -	Serverio pusė – naudojant ASP.NET.
 -	Duomenų bazė – MySQL. 
 
-2.1 pav. pavaizduota kuriamos sistemos diegimo diagrama. Sistemos talpinimui yra
+1 pav. pavaizduota kuriamos sistemos diegimo diagrama. Sistemos talpinimui yra
 naudojamas Azure serveris. Kiekviena sistemos dalis yra diegiama tame pačiame serveryje.
 Internetinė aplikacija yra pasiekiama per HTTP protokolą. Šios sistemos veikimui yra
 reikalingas Korona API, kuris pasiekiamas per aplikacijų programavimo sąsają. Pats Korona
