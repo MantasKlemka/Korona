@@ -7,7 +7,8 @@ Veikimo principas – kuriamą platformą sudaro dvi dalys: internetinė aplikac
 ## Funkciniai reikalavimai 
 Neregistruotas sistemos naudotojas galės: 
 1.	Peržiūrėti platformos pagrindinį puslapį; 
-2.	Peržiūrėti asmens izoliacijos pabaigą pagal asmens kodą; 
+2.	Peržiūrėti asmens izoliacijos pabaigą pagal asmens kodą;
+
 Pacientas galės: 
 1.	Atsijungti nuo internetinės aplikacijos; 
 2.	Prisijungti prie platformos;
