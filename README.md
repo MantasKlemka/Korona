@@ -41,3 +41,5 @@ naudojamas Azure serveris. Kiekviena sistemos dalis yra diegiama tame pačiame s
 Internetinė aplikacija yra pasiekiama per HTTP protokolą. Šios sistemos veikimui yra
 reikalingas Korona API, kuris pasiekiamas per aplikacijų programavimo sąsają. Pats Korona
 API vykdo duomenų mainus su duomenų baze - tam naudojama ORM sąsaja. 
+
+![image](https://user-images.githubusercontent.com/78092109/191050345-a04125cb-e087-450d-b6b7-edf7897545e4.png)
