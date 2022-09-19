@@ -18,7 +18,7 @@ Gydytojas galės:
 4.	Užregistruoti paciento izoliaciją:
     - Įtraukti izoliacijos priežastį;
     - Pateikti izoliacijos laikotarpį;
-5.	Užregistruoti paciento testą:
+5.	Užregistruoti izoliacijos testą:
     - Įtraukti testo rezultatą
 5.	Rezervuoti pacientui vietą ligoninėje;
 6.	Peržiūrėti kitus esamus pacientus, bei jų izoliacijas, įvedus jų asmens kodą;
