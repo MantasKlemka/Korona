@@ -30,6 +30,7 @@ Gydytojas galės:
 Administratorius galės: 
 1.	Patvirtinti gydytojo registraciją;
 2.	Registruoti naujas ligonines;
+3.	Ištrinti gydytojo arba paciento anketas
  
 ## Sistemos architektūra 
 Sistemos sudedamosios dalys: 
