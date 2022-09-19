@@ -33,6 +33,6 @@ Administratorius galės:
  
 ## Sistemos architektūra 
 Sistemos sudedamosios dalys: 
-•	Kliento pusė – naudojant React.js; 
-•	Serverio pusė – naudojant ASP.NET.
-•	Duomenų bazė – MySQL. 
+-   Kliento pusė – naudojant React.js; 
+-	Serverio pusė – naudojant ASP.NET.
+-	Duomenų bazė – MySQL. 
