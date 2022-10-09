@@ -7,28 +7,36 @@ Veikimo principas – kuriamą platformą sudaro dvi dalys: internetinė aplikac
 ## Funkciniai reikalavimai 
 Neregistruotas sistemos naudotojas galės: 
 1.	Peržiūrėti platformos pagrindinį puslapį; 
-2.	Peržiūrėti detalią izoliacijos pabaigą pagal asmens kodą;
+2.	Peržiūrėti izoliacijų sąrašą pagal asmens kodą;
+
 
 Gydytojas galės: 
 1.	Atsijungti nuo internetinės aplikacijos; 
 2.	Prisijungti prie platformos; 
-3.	Užregistruoti pacientą:
-    -	Pridėti paciento asmeninę informaciją;
-    - Gyvenamą vietą;
-4.	Užregistruoti paciento izoliaciją:
-    - Įtraukti izoliacijos priežastį;
-    - Pateikti izoliacijos laikotarpį;
-5.	Užregistruoti izoliacijos testą:
-    - Įtraukti testo rezultatą
-5.	Rezervuoti pacientui vietą ligoninėje;
-6.	Peržiūrėti kitus esamus pacientus, bei jų izoliacijas, įvedus jų asmens kodą;
-7.	Peržiūrėti savo užregistruotų pacientų informaciją bei izoliacijas;
-8.	Peržiūrėti kitų esamų gydytojų informaciją;
+3.	Užregistruoti pacientą;
+4.  Redaguoti paciento informaciją;
+5.  Peržiūrėti visų pacientų sąrašą;
+6.	Peržiūrėti savo užregistruotų pacientų sąrašą;
+7.  Peržiūrėti konkretaus paciento informaciją;
+8.	Užregistruoti paciento izoliaciją;
+9.  Redaguoti paciento izoliaciją;
+10. Ištrinti paciento izoliaciją;
+11. Peržiūrėti visas paciento izoliacijas;
+12. Peržiūrėti visas esamas izoliacijas;
+13. Peržiūrėti konkrečios izoliacijos informaciją;
+14.	Užregistruoti izoliacijos testą;
+15.  Redaguoti izoliacijos testą;
+16.  Ištrinti izoliacijos testą;
+17.  Peržiūrėti konkretaus testo informaciją;
+18.  Peržiūrėti visų esamų testų informaciją;
+19. Peržiūrėti visų konkrečios izoliacijos testų sąrašą;
+20.	Peržiūrėti visų esamų gydytojų sąrašą;
+
 
 Administratorius galės: 
 1.	Patvirtinti gydytojo registraciją;
-2.	Registruoti naujas ligonines;
-3.	Ištrinti gydytojo arba paciento profilius
+2.	Ištrinti gydytojo paskyrą;
+3.  Ištrinti paciento paskyrą;
  
 ## Sistemos architektūra 
 Sistemos sudedamosios dalys: 
@@ -45,3 +53,36 @@ API vykdo duomenų mainus su duomenų baze - tam naudojama ORM sąsaja.
 ![image](https://user-images.githubusercontent.com/78092109/191050345-a04125cb-e087-450d-b6b7-edf7897545e4.png)
 
 1 pav.
+
+## API aprašas
+
+Endpoints:
+- Doctor
+    - GET       /api/Doctor/All
+    - POST      /api/Doctor/
+    - PUT       /api/Doctor/Activate/{personalCode}
+    - DELETE    /api/Doctor/{personalCode}
+
+- Pacient
+    - GET       /api/Pacient/All/
+    - POST      /api/Pacient/
+    - GET       /api/Pacient/{personalCode}
+    - PUT       /api/Pacient/{personalCode}
+    - DELETE    /api/Pacient/{personalCode}
+    - GET       /api/Pacient/All/{personalCode}
+    
+- Isolation
+    - GET       /api/Isolation/All
+    - GET       /api/Isolation/All/{personalCode}
+    - POST      /api/Isolation/
+    - GET       /api/Isolation/{isolationID}
+    - PUT       /api/Isolation/{isolationID}
+    - DELETE    /api/Isolation/{isolationID}
+    
+- Test
+    - GET       /api/Test/All
+    - GET       /api/Test/All/{isolationID}
+    - POST      /api/Test/
+    - GET       /api/Test/{testID}
+    - PUT       /api/Test/testID
+    - DELETE    /api/Test/testID
