@@ -1,4 +1,5 @@
 using CoronaAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MySql.Data.MySqlClient;
 using System.Data;
@@ -18,44 +19,9 @@ namespace CoronaAPI.Controllers
             _connection = new MySqlConnection("server=localhost;userid=root;database=corona_base");
         }
 
-        [Route("All/{personalCode}")]
-        [HttpGet]
-        public ActionResult<List<Pacient>> GetAllDoctorPacients(string personalCode)
-        {
-            List<Pacient> pacients = new List<Pacient>();
-            try
-            {
-                using (_connection)
-                {
-                    _connection.Open();
-                    using (MySqlCommand cmd = _connection.CreateCommand())
-                    {
-                        cmd.CommandType = CommandType.Text;
-                        cmd.CommandTimeout = 300;
-                        cmd.CommandText = $"SELECT * FROM `pacients` WHERE doctor = '{personalCode}'";
-
-                        MySqlDataReader sqlResult = cmd.ExecuteReader();
-                        if (sqlResult != null)
-                        {
-                            while (sqlResult.Read())
-                            {
-                                Pacient pacient = new Pacient(sqlResult.GetString(0), sqlResult.GetString(1), sqlResult.GetString(2), sqlResult.GetString(3), sqlResult.GetString(4), sqlResult.GetString(5), sqlResult.GetString(6));
-                                pacients.Add(pacient);
-                            }
-                            sqlResult.Close();
-                        }
-                        return pacients;
-                    }
-                }
-            }
-            catch (MySqlException ex)
-            {
-                return StatusCode(400, ex.Message);
-            }
-        }
-
         [Route("All")]
         [HttpGet]
+        [Authorize(Roles = "Doctor")]
         public ActionResult<List<Pacient>> GetAllPacients()
         {
             List<Pacient> pacients = new List<Pacient>();
@@ -75,7 +41,8 @@ namespace CoronaAPI.Controllers
                         {
                             while (sqlResult.Read())
                             {
-                                Pacient pacient = new Pacient(sqlResult.GetString(0), sqlResult.GetString(1), sqlResult.GetString(2), sqlResult.GetString(3), sqlResult.GetString(4), sqlResult.GetString(5), sqlResult.GetString(6));
+                                DateTime date = DateTime.Parse(sqlResult.GetString(4));
+                                Pacient pacient = new Pacient(sqlResult.GetInt32(0), sqlResult.GetString(1), sqlResult.GetString(2), sqlResult.GetString(3), date.ToShortDateString(), sqlResult.GetString(5), sqlResult.GetString(6), sqlResult.GetInt32(7));
                                 pacients.Add(pacient);
                             }
                             sqlResult.Close();
@@ -92,22 +59,27 @@ namespace CoronaAPI.Controllers
 
         [Route("")]
         [HttpPost]
+        [Authorize(Roles = "Doctor")]
         public ActionResult<string> CreatePacient(Pacient pacient)
         {
             try
             {
                 using (_connection)
                 {
+                    if (!DateTime.TryParse(pacient.BirthDate, out DateTime date))
+                    {
+                        return StatusCode(400, "Invalid Birth Date");
+                    }
                     _connection.Open();
                     using (MySqlCommand cmd = _connection.CreateCommand())
                     {
                         cmd.CommandType = CommandType.Text;
                         cmd.CommandTimeout = 300;
-                        cmd.CommandText = $"INSERT INTO `pacients`(`personal_code`, `name`, `surname`, `birthdate`, `phone_number`, `address`, `doctor`) " +
-                            $"VALUES ('{pacient.PersonalCode}','{pacient.Name}','{pacient.Surname}','{pacient.BirthDate}','{pacient.PhoneNumber}','{pacient.Address}', '{pacient.Doctor}')";
+                        cmd.CommandText = $"INSERT INTO `pacients`(`identification_code`, `name`, `surname`, `birthdate`, `phone_number`, `address`, `doctor`) " +
+                            $"VALUES ('{pacient.IdentificationCode}','{pacient.Name}','{pacient.Surname}','{date.ToShortDateString()}','{pacient.PhoneNumber}','{pacient.Address}', '{pacient.Doctor}')";
 
                         cmd.ExecuteReader();
-                        return $"Pacient {pacient.Name} {pacient.Surname} ({pacient.PersonalCode}) created";
+                        return $"Pacient {pacient.Name} {pacient.Surname} ({pacient.IdentificationCode}) created";
                     }
                 }
             }
@@ -116,18 +88,19 @@ namespace CoronaAPI.Controllers
                 switch (ex.Number)
                 {
                     case 1452:
-                        return StatusCode(400, $"Doctor with Doctor ID ({pacient.Doctor}) does not exist");
+                        return StatusCode(404, $"Doctor ({pacient.Doctor}) does not exist");
                     case 1062:
-                        return StatusCode(400, $"Pacient with Personal Code ({pacient.PersonalCode}) already exists");
+                        return StatusCode(400, $"Pacient with Identifiaction Code ({pacient.IdentificationCode}) already exists");
                     default:
                         return StatusCode(400, ex.Message);
                 }
             }
         }
 
-        [Route("{personalCode}")]
+        [Route("{id}")]
         [HttpGet]
-        public ActionResult<Pacient> GetPacient(string personalCode)
+        [Authorize(Roles = "Doctor")]
+        public ActionResult<Pacient> GetPacient(int id)
         {
             Pacient pacient = new Pacient();
             try
@@ -139,7 +112,7 @@ namespace CoronaAPI.Controllers
                     {
                         cmd.CommandType = CommandType.Text;
                         cmd.CommandTimeout = 300;
-                        cmd.CommandText = $"SELECT * FROM `pacients` WHERE personal_code = '{personalCode}'";
+                        cmd.CommandText = $"SELECT * FROM `pacients` WHERE id = '{id}'";
 
                         MySqlDataReader sqlResult = cmd.ExecuteReader();
                         int rowsAffected = 0;
@@ -147,12 +120,13 @@ namespace CoronaAPI.Controllers
                         {
                             while (sqlResult.Read())
                             {
-                                pacient = new Pacient(sqlResult.GetString(0), sqlResult.GetString(1), sqlResult.GetString(2), sqlResult.GetString(3), sqlResult.GetString(4), sqlResult.GetString(5), sqlResult.GetString(6));
+                                DateTime date = DateTime.Parse(sqlResult.GetString(4));
+                                pacient = new Pacient(sqlResult.GetInt32(0), sqlResult.GetString(1), sqlResult.GetString(2), sqlResult.GetString(3), date.ToShortDateString(), sqlResult.GetString(5), sqlResult.GetString(6), sqlResult.GetInt32(7));
                                 rowsAffected++;
                             }
                             sqlResult.Close();
                         }
-                        return rowsAffected > 0 ? pacient : StatusCode(400, $"Pacient with Personal Code ({personalCode}) does not exist");
+                        return rowsAffected > 0 ? pacient : StatusCode(404, $"Pacient ({id}) does not exist");
                     }
                 }
             }
@@ -162,24 +136,43 @@ namespace CoronaAPI.Controllers
             }
         }
 
-        [Route("{personalCode}")]
+        [Route("{id}")]
         [HttpPut]
-        public ActionResult<string> UpdatePacient(string personalCode, Pacient pacient)
+        [Authorize(Roles = "Doctor")]
+        public ActionResult<string> UpdatePacient(int id, PacientForUpdate pacient)
         {
             try
             {
                 using (_connection)
                 {
+                    if (pacient.BirthDate != null && !DateTime.TryParse(pacient.BirthDate, out DateTime date))
+                    {
+                        return StatusCode(400, "Invalid Birth Date");
+                    }
                     _connection.Open();
                     using (MySqlCommand cmd = _connection.CreateCommand())
                     {
                         cmd.CommandType = CommandType.Text;
                         cmd.CommandTimeout = 300;
-                        cmd.CommandText = $"UPDATE `pacients` SET `personal_code`='{pacient.PersonalCode}',`name`='{pacient.Name}',`surname`='{pacient.Surname}'," +
-                            $"`birthdate`='{pacient.BirthDate}',`phone_number`='{pacient.PhoneNumber}',`address`='{pacient.Address}',`doctor`='{pacient.Doctor}' WHERE `personal_code` = '{personalCode}'";
+
+                        List<string> values = new List<string>
+                        {
+                            $"{(pacient.IdentificationCode != null ? $"`identification_code`='{pacient.IdentificationCode}'" : "")}",
+                            $"{(pacient.Name != null ? $"`name`='{pacient.Name}'" : "")}",
+                            $"{(pacient.Surname != null ? $"`surname`='{pacient.Surname}'" : "")}",
+                            $"{(pacient.BirthDate != null ? $"`birthdate`='{pacient.BirthDate}'" : "")}",
+                            $"{(pacient.PhoneNumber != null ? $"`phone_number`='{pacient.PhoneNumber}'" : "")}",
+                            $"{(pacient.Address != null ? $"`address`='{pacient.Address}'" : "")}",
+                            $"{(pacient.Doctor != null ? $"`doctor`='{pacient.Doctor}'" : "")}"
+                        };
+                        if(!values.Any(x => !string.IsNullOrEmpty(x)))
+                        {
+                            return StatusCode(304);
+                        }
+                        cmd.CommandText = $"UPDATE `pacients` SET {string.Join(",", values.Where(x => !string.IsNullOrEmpty(x)))} WHERE id = '{id}'";
 
                         MySqlDataReader sqlResult = cmd.ExecuteReader();
-                        return sqlResult.RecordsAffected > 0 ? $"Pacient ({personalCode}) updated" : StatusCode(400, $"Pacient with Personal Code ({personalCode}) does not exist");
+                        return sqlResult.RecordsAffected > 0 ? $"Pacient ({id}) updated" : StatusCode(404, $"Pacient ({id}) does not exist");
                     }
                 }
             }
@@ -188,18 +181,19 @@ namespace CoronaAPI.Controllers
                 switch (ex.Number)
                 {
                     case 1452:
-                        return StatusCode(400, $"Doctor with Doctor ID ({pacient.Doctor}) does not exist");
+                        return StatusCode(404, $"Doctor ({pacient.Doctor}) does not exist");
                     case 1062:
-                        return StatusCode(400, $"Pacient with Personal Code ({pacient.PersonalCode}) already exists");
+                        return StatusCode(400, $"Pacient with Identification Code ({pacient.IdentificationCode}) already exists");
                     default:
                         return StatusCode(400, ex.Message);
                 }
             }
         }
 
-        [Route("{personalCode}")]
+        [Route("{id}")]
         [HttpDelete]
-        public ActionResult<string> DeletePacient(string personalCode)
+        [Authorize(Roles = "Administrator")]
+        public ActionResult<string> DeletePacient(int id)
         {
             try
             {
@@ -210,10 +204,10 @@ namespace CoronaAPI.Controllers
                     {
                         cmd.CommandType = CommandType.Text;
                         cmd.CommandTimeout = 300;
-                        cmd.CommandText = $"DELETE FROM `pacients` WHERE personal_code = '{personalCode}'";
+                        cmd.CommandText = $"DELETE FROM `pacients` WHERE id = '{id}'";
 
                         MySqlDataReader sqlResult = cmd.ExecuteReader();
-                        return sqlResult.RecordsAffected > 0 ? $"Pacient ({personalCode}) deleted" : StatusCode(400, $"Pacient with Personal Code ({personalCode}) does not exist");
+                        return sqlResult.RecordsAffected > 0 ? $"Pacient ({id}) deleted" : StatusCode(404, $"Pacient ({id}) does not exist");
                     }
                 }
             }
@@ -226,6 +220,61 @@ namespace CoronaAPI.Controllers
                     default:
                         return StatusCode(400, ex.Message);
                 }
+            }
+        }
+
+        [Route("{id}/Isolations")]
+        [HttpGet]
+        [Authorize(Roles = "Doctor")]
+        public ActionResult<List<Isolation>> GetAllPacientIsolations(int id)
+        {
+            List<Isolation> isolations = new List<Isolation>();
+            try
+            {
+                using (_connection)
+                {
+                    _connection.Open();
+                    using (MySqlCommand cmd = _connection.CreateCommand())
+                    {
+                        cmd.CommandType = CommandType.Text;
+                        cmd.CommandTimeout = 300;
+                        cmd.CommandText = $"SELECT * FROM `pacients` WHERE id = '{id}'";
+
+                        MySqlDataReader sqlResult = cmd.ExecuteReader();
+                        int rowsAffected = 0;
+                        if (sqlResult != null)
+                        {
+                            while (sqlResult.Read())
+                            {
+                                rowsAffected++;
+                            }
+                            sqlResult.Close();
+                        }
+                        if (rowsAffected < 1)
+                        {
+                            return StatusCode(404, $"Pacient ({id}) does not exist");
+                        }
+
+                        cmd.CommandText = $"SELECT * FROM `isolations` WHERE `pacient` = '{id}'";
+
+                        sqlResult = cmd.ExecuteReader();
+                        if (sqlResult != null)
+                        {
+                            while (sqlResult.Read())
+                            {
+                                DateTime date = DateTime.Parse(sqlResult.GetString(2));
+                                Isolation isolation = new Isolation(sqlResult.GetInt32(0), sqlResult.GetString(1), date.ToShortDateString(), sqlResult.GetInt32(3), sqlResult.GetInt32(4), sqlResult.GetString(5));
+                                isolations.Add(isolation);
+                            }
+                            sqlResult.Close();
+                        }
+                        return isolations;
+                    }
+                }
+            }
+            catch (MySqlException ex)
+            {
+                return StatusCode(400, ex.Message);
             }
         }
     }
