@@ -20,7 +20,7 @@ namespace CoronaAPI.Controllers
         public MainController(IConfiguration config)
         {
             _config = config;
-            _connection = new MySqlConnection("server=localhost;userid=root;database=corona_base");
+            _connection = new MySqlConnection(_config.GetConnectionString("myDB"));
         }
 
         private string GenerateToken(string primary, string role)
@@ -62,10 +62,12 @@ namespace CoronaAPI.Controllers
 
                         MySqlDataReader sqlResult = cmd.ExecuteReader();
                         int rowsAffected = 0;
+                        int doctorId = -1;
                         if (sqlResult != null)
                         {
                             while (sqlResult.Read())
                             {
+                                doctorId = sqlResult.GetInt32(0);
                                 if (sqlResult.GetString(4).Equals(account.Password)) isAuthorized = true;
                                 if (isAuthorized && sqlResult.GetInt16(5) == 1) isActivated = true;
                                 rowsAffected++;
@@ -76,7 +78,7 @@ namespace CoronaAPI.Controllers
                         {
                             if (isAuthorized)
                             {
-                                return isActivated ? GenerateToken(account.Email, "Doctor") : StatusCode(400, $"Account is not activated");
+                                return isActivated ? doctorId + ","+ GenerateToken(account.Email, "Doctor") : StatusCode(400, $"Account is not activated");
                             }
                             else
                             {

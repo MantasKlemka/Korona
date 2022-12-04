@@ -7,6 +7,7 @@ using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using static Org.BouncyCastle.Math.EC.ECCurve;
 
 namespace CoronaAPI.Controllers
 {
@@ -15,10 +16,11 @@ namespace CoronaAPI.Controllers
     public class DoctorController : ControllerBase
     {
         private MySqlConnection _connection;
-
-        public DoctorController()
+        private IConfiguration _config;
+        public DoctorController(IConfiguration config)
         {
-            _connection = new MySqlConnection("server=localhost;userid=root;database=corona_base");
+            _config = config;
+            _connection = new MySqlConnection(_config.GetConnectionString("myDB"));
         }
 
         [Route("All")]
@@ -108,7 +110,7 @@ namespace CoronaAPI.Controllers
 
         [Route("")]
         [HttpPost]
-        [Authorize(Roles = "Doctor")]
+        [AllowAnonymous]
         public ActionResult<string> CreateDoctor(Doctor doctor)
         {
             try
@@ -173,7 +175,7 @@ namespace CoronaAPI.Controllers
         }
         [Route("{id}/Pacients")]
         [HttpGet]
-        [Authorize(Roles = "Doctor")]
+        [Authorize(Roles = "Administrator, Doctor")]
         public ActionResult<List<Pacient>> GetAllDoctorPacients(int id)
         {
             List<Pacient> pacients = new List<Pacient>();

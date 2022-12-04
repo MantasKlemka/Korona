@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project>
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAP2xOz8WT2EWdtQ/7UIMmsgAAAAACAAAAAAAQZgAAAAEAACAAAAAwG1oW5zTYHAA7+IgcMZ3+HBV231Xop/yJvp+GLBQUegAAAAAOgAAAAAIAACAAAAAuC5sNDh60AmQrdaWodPRle30RBEHM0LduF5Ol9dQNB4AAAADcgF2GABo6pr/UhcUoysUCOWUTbHOixFzXcsKM0zDyNjIcBF8aZZTCdZwL4FLxp3i8C/oHFYG87AplCFORuADwFKIbNoLCERlNrVPPqN1hXZDXbUgr83Errf2fcMxZQSbHex9tIAU1090oG4XeiygtoP8zYwwHamBa/mSmbm906EAAAADNcLENr1HaqvrY9ROeJzq8m6kt3Y7E3Xk4dPdpxP8GyeaGVlse0d6L6nh8pfPYcShM1OPuZIGzs/JFwDEyZgjR</EncryptedPassword>
+    <History>True|2022-12-04T19:26:02.9590667Z;True|2022-12-04T17:41:19.8999787+02:00;True|2022-11-07T18:13:15.7482484+02:00;True|2022-11-07T18:11:33.0514899+02:00;True|2022-11-07T18:09:31.4275849+02:00;True|2022-11-07T17:47:21.8728701+02:00;True|2022-11-07T17:43:48.2324567+02:00;True|2022-11-07T17:12:34.2112621+02:00;True|2022-11-06T12:35:37.1123097+02:00;True|2022-11-06T12:00:10.6958267+02:00;True|2022-11-06T11:55:04.1130603+02:00;True|2022-11-06T11:45:56.4511558+02:00;True|2022-11-06T00:04:04.5224149+02:00;True|2022-11-05T23:19:23.9137660+02:00;True|2022-11-05T23:15:51.8940443+02:00;True|2022-11-05T23:11:23.8963957+02:00;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+  <ItemGroup>
+    <DestinationConnectionStrings Include="myDB">
+      <Value>Server=korona.mysql.database.azure.com%3b Port=3306%3b Database=koronadb%3b Uid=dbadmin%40korona%3b Pwd=Admin123%3b SslMode=Preferred%3b</Value>
+    </DestinationConnectionStrings>
+  </ItemGroup>
+</Project>

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MySql.Data.MySqlClient;
 using System.Data;
+using static Org.BouncyCastle.Math.EC.ECCurve;
 
 namespace CoronaAPI.Controllers
 {
@@ -10,18 +11,17 @@ namespace CoronaAPI.Controllers
     [Route("api/[controller]")]
     public class PacientController : ControllerBase
     {
-        private readonly ILogger<PacientController> _logger;
         private MySqlConnection _connection;
-
-        public PacientController(ILogger<PacientController> logger)
+        private IConfiguration _config;
+        public PacientController(IConfiguration config)
         {
-            _logger = logger;
-            _connection = new MySqlConnection("server=localhost;userid=root;database=corona_base");
+            _config = config;
+            _connection = new MySqlConnection(_config.GetConnectionString("myDB"));
         }
 
         [Route("All")]
         [HttpGet]
-        [Authorize(Roles = "Doctor")]
+        [Authorize(Roles = "Administrator, Doctor")]
         public ActionResult<List<Pacient>> GetAllPacients()
         {
             List<Pacient> pacients = new List<Pacient>();
@@ -59,7 +59,7 @@ namespace CoronaAPI.Controllers
 
         [Route("")]
         [HttpPost]
-        [Authorize(Roles = "Doctor")]
+        [Authorize(Roles = "Administrator, Doctor")]
         public ActionResult<string> CreatePacient(Pacient pacient)
         {
             try
@@ -76,8 +76,7 @@ namespace CoronaAPI.Controllers
                         cmd.CommandType = CommandType.Text;
                         cmd.CommandTimeout = 300;
                         cmd.CommandText = $"INSERT INTO `pacients`(`identification_code`, `name`, `surname`, `birthdate`, `phone_number`, `address`, `doctor`) " +
-                            $"VALUES ('{pacient.IdentificationCode}','{pacient.Name}','{pacient.Surname}','{date.ToShortDateString()}','{pacient.PhoneNumber}','{pacient.Address}', '{pacient.Doctor}')";
-
+                            $"VALUES ('{pacient.IdentificationCode}','{pacient.Name}','{pacient.Surname}','{date.ToString("yyyy-MM-dd")}','{pacient.PhoneNumber}','{pacient.Address}', '{pacient.Doctor}')";
                         cmd.ExecuteReader();
                         return $"Pacient {pacient.Name} {pacient.Surname} ({pacient.IdentificationCode}) created";
                     }
@@ -99,7 +98,7 @@ namespace CoronaAPI.Controllers
 
         [Route("{id}")]
         [HttpGet]
-        [Authorize(Roles = "Doctor")]
+        [Authorize(Roles = "Administrator, Doctor")]
         public ActionResult<Pacient> GetPacient(int id)
         {
             Pacient pacient = new Pacient();
@@ -138,7 +137,7 @@ namespace CoronaAPI.Controllers
 
         [Route("{id}")]
         [HttpPut]
-        [Authorize(Roles = "Doctor")]
+        [Authorize(Roles = "Administrator, Doctor")]
         public ActionResult<string> UpdatePacient(int id, PacientForUpdate pacient)
         {
             try
@@ -225,7 +224,7 @@ namespace CoronaAPI.Controllers
 
         [Route("{id}/Isolations")]
         [HttpGet]
-        [Authorize(Roles = "Doctor")]
+        [Authorize(Roles = "Administrator, Doctor")]
         public ActionResult<List<Isolation>> GetAllPacientIsolations(int id)
         {
             List<Isolation> isolations = new List<Isolation>();

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MySql.Data.MySqlClient;
 using System.Data;
+using static Org.BouncyCastle.Math.EC.ECCurve;
 
 namespace CoronaAPI.Controllers
 {
@@ -10,18 +11,18 @@ namespace CoronaAPI.Controllers
     [Route("api/[controller]")]
     public class TestController : ControllerBase
     {
-        private readonly ILogger<TestController> _logger;
         private MySqlConnection _connection;
+        private IConfiguration _config;
 
-        public TestController(ILogger<TestController> logger)
+        public TestController(IConfiguration config)
         {
-            _logger = logger;
-            _connection = new MySqlConnection("server=localhost;userid=root;database=corona_base");
+            _config = config;
+            _connection = new MySqlConnection(_config.GetConnectionString("myDB"));
         }
 
         [Route("All")]
         [HttpGet]
-        [Authorize(Roles = "Doctor")]
+        [Authorize(Roles = "Administrator, Doctor")]
         public ActionResult<List<Test>> GetAllTests()
         {
             List<Test> tests = new List<Test>();
@@ -59,7 +60,7 @@ namespace CoronaAPI.Controllers
 
         [Route("")]
         [HttpPost]
-        [Authorize(Roles = "Doctor")]
+        [Authorize(Roles = "Administrator, Doctor")]
         public ActionResult<string> CreateTest(Test test)
         {
             try
@@ -97,7 +98,7 @@ namespace CoronaAPI.Controllers
 
         [Route("{id}")]
         [HttpGet]
-        [Authorize(Roles = "Doctor")]
+        [Authorize(Roles = "Administrator, Doctor")]
         public ActionResult<Test> GetTest(int id)
         {
             Test test = new Test();
@@ -136,7 +137,7 @@ namespace CoronaAPI.Controllers
 
         [Route("{id}")]
         [HttpPut]
-        [Authorize(Roles = "Doctor")]
+        [Authorize(Roles = "Administrator, Doctor")]
         public ActionResult<string> UpdateTest(int id, TestForUpdate test)
         {
             try
@@ -185,7 +186,7 @@ namespace CoronaAPI.Controllers
 
         [Route("{id}")]
         [HttpDelete]
-        [Authorize(Roles = "Doctor")]
+        [Authorize(Roles = "Administrator, Doctor")]
         public ActionResult<string> DeleteTest(int id)
         {
             try

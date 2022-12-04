@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using System.Data;
+using static Org.BouncyCastle.Math.EC.ECCurve;
 
 namespace CoronaAPI.Controllers
 {
@@ -11,18 +12,18 @@ namespace CoronaAPI.Controllers
     [Route("api/[controller]")]
     public class IsolationController : ControllerBase
     {
-        private readonly ILogger<IsolationController> _logger;
         private MySqlConnection _connection;
+        private IConfiguration _config;
 
-        public IsolationController(ILogger<IsolationController> logger)
+        public IsolationController(IConfiguration config)
         {
-            _logger = logger;
-            _connection = new MySqlConnection("server=localhost;userid=root;database=corona_base");
+            _config = config;
+            _connection = new MySqlConnection(_config.GetConnectionString("myDB"));
         }
 
         [Route("All")]
         [HttpGet]
-        [Authorize(Roles = "Doctor")]
+        [Authorize(Roles = "Administrator, Doctor")]
         public ActionResult<List<Isolation>> GetAllIsolations()
         {
             List<Isolation> isolations = new List<Isolation>();
@@ -60,7 +61,7 @@ namespace CoronaAPI.Controllers
 
         [Route("")]
         [HttpPost]
-        [Authorize(Roles = "Doctor")]
+        [Authorize(Roles = "Administrator, Doctor")]
         public ActionResult<string> CreateIsolation(Isolation isolation)
         {
             try
@@ -138,7 +139,7 @@ namespace CoronaAPI.Controllers
 
         [Route("{id}")]
         [HttpGet]
-        [Authorize(Roles = "Doctor")]
+        [Authorize(Roles = "Administrator, Doctor")]
         public ActionResult<Isolation> GetIsolation(int id)
         {
             Isolation isolation = new Isolation();
@@ -177,7 +178,7 @@ namespace CoronaAPI.Controllers
 
         [Route("{id}")]
         [HttpPut]
-        [Authorize(Roles = "Doctor")]
+        [Authorize(Roles = "Administrator, Doctor")]
         public ActionResult<string> UpdateIsolation(int id, IsolationForUpdate isolation)
         {
             try
@@ -226,7 +227,7 @@ namespace CoronaAPI.Controllers
 
         [Route("{id}")]
         [HttpDelete]
-        [Authorize(Roles = "Doctor")]
+        [Authorize(Roles = "Administrator, Doctor")]
         public ActionResult<string> DeleteIsolation(int id)
         {
             try
@@ -258,7 +259,7 @@ namespace CoronaAPI.Controllers
         }
         [Route("{id}/Tests")]
         [HttpGet]
-        [Authorize(Roles = "Doctor")]
+        [Authorize(Roles = "Administrator, Doctor")]
         public ActionResult<List<Test>> GetAllTests(int id)
         {
             List<Test> tests = new List<Test>();
