@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState} from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { Button } from 'react-bootstrap';
 import {ReactComponent as Logo} from './medication.svg';
-import e from "cors";
+import ProgressBar from 'react-bootstrap/ProgressBar';
 
 export default function Isolations() {
     const navigate = useNavigate();
@@ -23,7 +23,10 @@ export default function Isolations() {
     const [pacientEdit, setPacientEdit] = useState([]);
     const [idToDelete, setIdToDelete] = useState([]);
     const [loading, setLoading] = useState([]);
-    
+    var amountLeft = useRef(); 
+    var percentAmount = useRef(); 
+    var totalAmount = useRef(); 
+    const [progress, setProgress] = useState([]);
 
 
     useEffect(() => {
@@ -118,7 +121,7 @@ export default function Isolations() {
         };
         const res = await fetch('https://korona.azurewebsites.net/api/Pacient/' + pacientID + '/Isolations', requestOptions)
         const data = await res.text();
-        fillTable(res, data, "Pacient " + pacientID + " isolations");
+        fillTable(res, data, "Pacient " + pacientID + " isolations", true);
     }
 
     async function fetchGetAll(){
@@ -169,7 +172,7 @@ export default function Isolations() {
         fillTable(res, data, "Isolation " + isolationID);
     }
 
-    function fillTable(res, answer, title){
+    function fillTable(res, answer, title, byPacient){
         if(res.status != 200)
         {
             let error = document.getElementById('errorLoad');
@@ -182,21 +185,47 @@ export default function Isolations() {
             if(isolations.constructor == Array){
                 isolations.map(isolation=>
                 (
-                    createRow(isolation, i),
+                    byPacient ? createRow(isolation, i, true) : createRow(isolation, i),
                     i++
                 ));
             }
             else{
-                createRow(isolations, i)
+                byPacient ? createRow(isolations, i, true) : createRow(isolations, i);
             }
             setVisibilityStatus("visible");
+        }
+        if(byPacient){
+            if(amountLeft > 0){
+                document.getElementById('isolationTermID').textContent = "Pacient isolation: " + Math.floor(amountLeft) + " days left";
+                percentAmount = (100 - ((amountLeft * 100) / totalAmount));
+                console.log(percentAmount)
+                var element = React.createElement(ProgressBar, {"now": percentAmount, "id": "progress"});
+                setProgress(element);
+                console.log(element);
+            }
+            else{
+
+                document.getElementById('isolationTermID').textContent = "Pacient has no active isolation";
+            }
+
         }
         setLoading(false);
 
     }
 
-    function createRow(isolation, i){
+    function createRow(isolation, i, byPacient){
 
+        if(byPacient){
+            var dateNow = Date.now();
+            var amountDays = parseInt(isolation.amountOfDays);
+            var startDate = Date.parse(isolation.startDate)
+            var daysLeft = ((startDate + (86400000 * amountDays)) - dateNow) / 60000 / 60 / 24;
+            if(daysLeft > 0){
+                totalAmount = parseInt(totalAmount) + amountDays;
+                amountLeft = parseFloat(amountLeft) + daysLeft;
+            }
+        }
+        
         let causeText = isolation.cause;
         let amountText = isolation.amountOfDays;
         let startText = isolation.startDate.split("/");
@@ -235,6 +264,7 @@ export default function Isolations() {
     }
 
     function loadAll(){
+        document.getElementById('isolationTermID').textContent = "";
         setLoading(true);
         setVisibilityStatus("hidden");
         document.getElementById('errorLoad').textContent = "";
@@ -244,6 +274,10 @@ export default function Isolations() {
     }
 
     function loadByPacient(){
+        document.getElementById('isolationTermID').textContent = "";
+        amountLeft = 0;
+        totalAmount = 0;
+        percentAmount = 0;
         setLoading(true);
         setVisibilityStatus("hidden");
         document.getElementById('errorLoad').textContent = "";
@@ -254,9 +288,11 @@ export default function Isolations() {
         }
         setTableRows();
         fetchGetAllByPacient();
+        document.getElementById('isolationTermID').textContent = "Pacient isolation:";
     }
 
     function loadById(){
+        document.getElementById('isolationTermID').textContent = "";
         setLoading(true);
         setVisibilityStatus("hidden");
         document.getElementById('errorLoad').textContent = "";
@@ -331,8 +367,7 @@ export default function Isolations() {
                     <Button className="btn-secondary loadButton" onClick={() => loadAll()}>Load All Isolations</Button><br></br>
                     <Button className="btn-secondary loadButton" data-bs-toggle="modal" data-bs-target = "#createModal">Create new Isolation</Button>
                 </div>
-                
-                <br></br><br></br><br></br><br></br>
+                <br></br><br></br><br></br><div className="isolationTerm" id="isolationTermID"><b></b></div><br></br>
                 <b id="tableTitleText"></b>
                 <table id="pacientsTable" className="table" style={{visibility: visibilityStatus}}>
                     <thead className="titleRow">
