@@ -62,15 +62,22 @@ export default function Login() {
         navigate("/Register")
     }
 
-    function directToMainPage(token, id){
+    function directToMainPage(token, id, name){
         sessionStorage.setItem('token', token)
         if(id != -1){
             sessionStorage.setItem('doctorID', id)
         }
+        else{
+            sessionStorage.setItem('admin', true)
+        }
+        sessionStorage.setItem('name', name)
         navigate("/MainPage")
     }
 
-    
+    function directToMain(){
+        navigate("/")
+    }
+
     return (
         <>
             <div className="centerMiddle">
@@ -83,7 +90,8 @@ export default function Login() {
                     <input className="form-control inputs" ref={passwordInput} type="password" placeholder="Password" maxLength="27" required/>
                     <br></br>
                     <Button className="loginButton btn-secondary" onClick={processLogin}>Login</Button>
-                    <Button className="registerButton btn-secondary" onClick={directToRegister}>Register</Button>       
+                    <Button className="registerButton btn-secondary" onClick={directToRegister}>Register</Button>     
+                    <Button className="isolationCodeButton btn-secondary" onClick={directToMain}>Have isolation code?</Button>  
                 </div>       
             </div>
             <footer className="footerLogin">

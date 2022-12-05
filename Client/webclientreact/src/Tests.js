@@ -2,28 +2,26 @@ import React, { useEffect, useRef, useState} from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { Button } from 'react-bootstrap';
 import {ReactComponent as Logo} from './medication.svg';
-import e from "cors";
 
-export default function Isolations() {
+export default function Tests() {
     const navigate = useNavigate();
     const [tableRows, setTableRows] = useState([]);
 
-    const [cause, setCause] = useState([]);
-    const [start, setStart] = useState([]);
-    const [amount, setAmount] = useState([]);
-    const [pacient, setPacient] = useState([]);
-    const [code, setCode] = useState([]);
+    const [date, setDate] = useState([]);
+    const [type, setType] = useState([]);
+    const [result, setResult] = useState([]);
+    const [isolation, setIsolation] = useState([]);
+
     const [visibilityStatus, setVisibilityStatus] = useState([]);
     const [isolationID, setIsolationID] = useState([]);
-    const [pacientID, setPacientID] = useState([]);
+    const [testID, setTestID] = useState([]);
     const [idEdit, setIdEdit] = useState([]);
-    const [causeEdit, setCauseEdit] = useState([]);
-    const [startEdit, setStartEdit] = useState([]);
-    const [amountEdit, setAmountEdit] = useState([]);
-    const [pacientEdit, setPacientEdit] = useState([]);
+    const [dateEdit, setDateEdit] = useState([]);
+    const [typeEdit, setTypeEdit] = useState([]);
+    const [resultEdit, setResultEdit] = useState([]);
+    const [isolationEdit, setIsolationEdit] = useState([]);
     const [idToDelete, setIdToDelete] = useState([]);
     const [loading, setLoading] = useState([]);
-    
 
 
     useEffect(() => {
@@ -37,17 +35,17 @@ export default function Isolations() {
     function saveEdit(){
         setLoading(true);
         let json = {};
-        if(causeEdit != cause){
-            json["cause"] = cause;
+        if(dateEdit != date){
+            json["date"] = date;
         }
-        if(startEdit != start){
-            json["startDate"] = start;
+        if(typeEdit != type){
+            json["type"] = type;
         }
-        if(pacientEdit != pacient){
-            json["pacient"] = pacient;
+        if(resultEdit != result){
+            json["result"] = result;
         }
-        if(amountEdit != amount){
-            json["amountOfDays"] = amount;
+        if(isolationEdit != isolation){
+            json["isolation"] = isolation;
         }
         if(JSON.stringify(json) != '{}')
         {
@@ -67,7 +65,7 @@ export default function Isolations() {
                 'Content-Type': 'application/json'},
             body : json
         };
-        fetch('https://korona.azurewebsites.net/api/Isolation/', requestOptions)
+        fetch('https://korona.azurewebsites.net/api/Test/', requestOptions)
         .then(res => afterFetchCreate(res))
     }
 
@@ -79,7 +77,7 @@ export default function Isolations() {
                 'Content-Type': 'application/json'},
             body : json
         };
-        fetch('https://korona.azurewebsites.net/api/Isolation/' + idEdit, requestOptions)
+        fetch('https://korona.azurewebsites.net/api/Test/' + idEdit, requestOptions)
         .then(res => afterFetchEdit(res))
     }
 
@@ -109,16 +107,16 @@ export default function Isolations() {
         setLoading(false);
     }
 
-    async function fetchGetAllByPacient(){
+    async function fetchGetAllByIsolation(){
         const requestOptions = {
             method: 'GET',
             headers: { 
                 'Authorization':'Bearer ' + sessionStorage.getItem("token"),
                 'Content-Type': 'application/json'}
         };
-        const res = await fetch('https://korona.azurewebsites.net/api/Pacient/' + pacientID + '/Isolations', requestOptions)
+        const res = await fetch('https://korona.azurewebsites.net/api/Isolation/' + isolationID + '/Tests', requestOptions)
         const data = await res.text();
-        fillTable(res, data, "Pacient " + pacientID + " isolations");
+        fillTable(res, data, "Isolation " + isolationID + " tests");
     }
 
     async function fetchGetAll(){
@@ -128,9 +126,9 @@ export default function Isolations() {
                 'Authorization':'Bearer ' + sessionStorage.getItem("token"),
                 'Content-Type': 'application/json'}
         };
-        const res = await fetch('https://korona.azurewebsites.net/api/Isolation/All/', requestOptions)
+        const res = await fetch('https://korona.azurewebsites.net/api/Test/All/', requestOptions)
         const data = await res.text();
-        fillTable(res, data, "All isolations");
+        fillTable(res, data, "All Tests");
     }
 
     async function fetchDelete(){
@@ -140,7 +138,7 @@ export default function Isolations() {
                 'Authorization':'Bearer ' + sessionStorage.getItem("token"),
                 'Content-Type': 'application/json'}
         };
-        const res = await fetch('https://korona.azurewebsites.net/api/Isolation/' + idToDelete, requestOptions);
+        const res = await fetch('https://korona.azurewebsites.net/api/Test/' + idToDelete, requestOptions);
         const data = await res.text();
         afterFetchDelete(res, data);
     }
@@ -155,6 +153,7 @@ export default function Isolations() {
         {
             window.location.reload(true);
         }
+        setLoading(false);
     }
 
     async function fetchGetById(){
@@ -164,9 +163,9 @@ export default function Isolations() {
                 'Authorization':'Bearer ' + sessionStorage.getItem("token"),
                 'Content-Type': 'application/json'}
         };
-        const res = await fetch('https://korona.azurewebsites.net/api/Isolation/' + isolationID, requestOptions);
+        const res = await fetch('https://korona.azurewebsites.net/api/Test/' + testID, requestOptions);
         const data = await res.text();
-        fillTable(res, data, "Isolation " + isolationID);
+        fillTable(res, data, "Test " + testID);
     }
 
     function fillTable(res, answer, title){
@@ -177,17 +176,17 @@ export default function Isolations() {
         }
         else{
             document.getElementById('tableTitleText').textContent = title;
-            var isolations = JSON.parse(answer);
+            var tests = JSON.parse(answer);
             let i = 0;
-            if(isolations.constructor == Array){
-                isolations.map(isolation=>
+            if(tests.constructor == Array){
+                tests.map(test=>
                 (
-                    createRow(isolation, i),
+                    createRow(test, i),
                     i++
                 ));
             }
             else{
-                createRow(isolations, i)
+                createRow(tests, i)
             }
             setVisibilityStatus("visible");
         }
@@ -195,43 +194,38 @@ export default function Isolations() {
 
     }
 
-    function createRow(isolation, i){
-
-        let causeText = isolation.cause;
-        let amountText = isolation.amountOfDays;
-        let startText = isolation.startDate.split("/");
-        startText = startText[2] + "-" + (startText[0] > 9 ? "" + startText[0] : "0" + startText[0]) + "-" + (startText[1]> 9 ? "" + startText[1] : "0" + startText[1])
-        let pacientText = isolation.pacient;
-        let codeText = isolation.code;
-
-        let id = React.createElement('td',{key: "id" + i}, isolation.id);
-        let cause = React.createElement('td',{key: "cause" + i}, causeText);
-        let amount = React.createElement('td',{key: "amount" + i}, amountText);
-        let start = React.createElement('td',{key: "startDate" + i}, startText);
-        let pacient = React.createElement('td',{key: "pacient" + i},pacientText);
-        let code = React.createElement('td',{key: "code" + i},codeText);
-        let deleteIsolation = React.createElement('td', {key: "delete" + i},"", React.createElement('button',{key: "deleteModal" + i, 'data-bs-toggle': "modal", 'data-bs-target': "#deleteModal", 'className': "btn floatButton", onClick: () => setIdToDelete(isolation.id) },"Delete"));
-        let edit = React.createElement('td', {key: "edit" + i},"", React.createElement('button',{key: "editModal" + i, 'data-bs-toggle': "modal", 'data-bs-target': "#editModal", 'className': "btn floatButton", onClick: () => fillEdit(isolation.id, causeText, startText, amountText, pacientText, codeText) },"Edit"));
-        let childs = [id, cause, amount, start, pacient, code, edit, deleteIsolation]
+    function createRow(test, i){
+        let dateText = test.date.split("/");
+        dateText = dateText[2] + "-" + (dateText[0] > 9 ? "" + dateText[0] : "0" + dateText[0]) + "-" + (dateText[1]> 9 ? "" + dateText[1] : "0" + dateText[1])
+        let typeText = test.type;
+        let resultText = test.result;
+        let isolationText = test.isolation;
+        let id = React.createElement('td',{key: "id" + i}, test.id);
+        let type = React.createElement('td',{key: "type" + i}, typeText);
+        let result = React.createElement('td',{key: "result" + i}, resultText);
+        let date = React.createElement('td',{key: "date" + i}, dateText);
+        let isolation = React.createElement('td',{key: "isolation" + i},isolationText);
+        let deleteTest = React.createElement('td', {key: "delete" + i},"", React.createElement('button',{key: "deleteModal" + i, 'data-bs-toggle': "modal", 'data-bs-target': "#deleteModal", 'className': "btn floatButton", onClick: () => setIdToDelete(test.id) },"Delete"));
+        let edit = React.createElement('td', {key: "edit" + i},"", React.createElement('button',{key: "editModal" + i, 'data-bs-toggle': "modal", 'data-bs-target': "#editModal", 'className': "btn floatButton", onClick: () => fillEdit(test.id, dateText, typeText, resultText, isolationText) },"Edit"));
+        let childs = [id, date, type, result, isolation, edit, deleteTest]
         let element = React.createElement('tr', {key: "row" + i}, childs);
         setTableRows(oldArray => [oldArray, element]);
     }
 
-    function DeleteIsolation(){
+    function DeleteTest(){
         fetchDelete();
     }
 
-    function fillEdit(id, cause, start, amount, pacient, code){
-        setCauseEdit(cause);
-        setAmountEdit(amount);
-        setStartEdit(start);
-        setPacientEdit(pacient);
+    function fillEdit(id, date, type, result, isolation){
+        setDateEdit(date);
+        setTypeEdit(type);
+        setResultEdit(result);
+        setIsolationEdit(isolation);
         setIdEdit(id);
-        setCause(cause);
-        setAmount(amount);
-        setStart(start);
-        setPacient(pacient);
-        setCode(code);
+        setDate(date);
+        setType(type);
+        setResult(result);
+        setIsolation(isolation);
     }
 
     function loadAll(){
@@ -243,20 +237,7 @@ export default function Isolations() {
         fetchGetAll();
     }
 
-    function loadByPacient(){
-        setLoading(true);
-        setVisibilityStatus("hidden");
-        document.getElementById('errorLoad').textContent = "";
-        document.getElementById('tableTitleText').textContent = "";
-        if(pacientID.length === 0){
-            setLoading(false);
-            return;
-        }
-        setTableRows();
-        fetchGetAllByPacient();
-    }
-
-    function loadById(){
+    function loadByIsolation(){
         setLoading(true);
         setVisibilityStatus("hidden");
         document.getElementById('errorLoad').textContent = "";
@@ -266,22 +247,34 @@ export default function Isolations() {
             return;
         }
         setTableRows();
+        fetchGetAllByIsolation();
+    }
+
+    function loadById(){
+        setLoading(true);
+        setVisibilityStatus("hidden");
+        document.getElementById('errorLoad').textContent = "";
+        document.getElementById('tableTitleText').textContent = "";
+        if(testID.length === 0){
+            setLoading(false);
+            return;
+        }
+        setTableRows();
         fetchGetById();
     }
 
     function create(){
         setLoading(true);
-        if(cause.length === 0 || start.length === 0 || amount.length === 0 || pacient.length === 0){
+        if(date.length === 0 || type.length === 0 || result.length === 0 || isolation.length === 0){
             let error = document.getElementById('errorCreate');
             error.textContent = "All fields should be filled!"
-            setLoading(false);
         }
         else{
             let json = {};
-            json["cause"] = cause;
-            json["startDate"] = start;
-            json["amountOfDays"] = amount;
-            json["pacient"] = pacient;
+            json["date"] = date;
+            json["type"] = type;
+            json["result"] = result;
+            json["isolation"] = isolation;
     
             if(JSON.stringify(json) != '{}')
             {
@@ -312,8 +305,8 @@ export default function Isolations() {
                     <div className="navbar-nav">
                         <a className="nav-item nav-link" href="/Doctors">Doctors</a>
                         <a className="nav-item nav-link" href="/Pacients">Pacients</a>
-                        <a className="nav-link nav-link" active>Isolations</a>
-                        <a className="nav-item nav-link" href="/Tests">Tests</a>
+                        <a className="nav-item nav-link"  href="/Isolations">Isolations</a>
+                        <a className="nav-link nav-link" active>Tests</a>
                     </div>
                     <div className="navbar-nav">
                         <a className="nav-item nav-link" href="/">Logout</a>
@@ -324,25 +317,24 @@ export default function Isolations() {
                 <div className="actionElements">
                 <p id="actionsText"><b>Actions</b></p>
                     <p id="errorLoad" className="errorTextTitle"></p>
+                    <input className="form-control inputs inputLoad" type="text" size="20" placeholder="Test ID" onChange = {(e) => {setTestID(e.target.value); }}/>
+                    <Button className="btn-secondary loadButton" onClick={() => loadById()}>Load Test by Id</Button><br></br><br></br>                 
                     <input className="form-control inputs inputLoad" type="text" size="20" placeholder="Isolation ID" onChange = {(e) => {setIsolationID(e.target.value); }}/>
-                    <Button className="btn-secondary loadButton" onClick={() => loadById()}>Load Isolations by Id</Button><br></br><br></br>           
-                    <input className="form-control inputs inputLoad" type="text" size="20" placeholder="Pacient ID" onChange = {(e) => {setPacientID(e.target.value); }}/>
-                    <Button className="btn-secondary loadButton" onClick={() => loadByPacient()}>Load Pacient' Isolations</Button><br></br><br></br>                     
-                    <Button className="btn-secondary loadButton" onClick={() => loadAll()}>Load All Isolations</Button><br></br>
-                    <Button className="btn-secondary loadButton" data-bs-toggle="modal" data-bs-target = "#createModal">Create new Isolation</Button>
+                    <Button className="btn-secondary loadButton" onClick={() => loadByIsolation()}>Load Isolation' Tests</Button><br></br><br></br>                
+                    <Button className="btn-secondary loadButton" onClick={() => loadAll()}>Load All Tests</Button><br></br>
+                    <Button className="btn-secondary loadButton" data-bs-toggle="modal" data-bs-target = "#createModal">Create new Test</Button>
                 </div>
                 
                 <br></br><br></br><br></br><br></br>
                 <b id="tableTitleText"></b>
-                <table id="pacientsTable" className="table" style={{visibility: visibilityStatus}}>
+                <table id="testsTable" className="table" style={{visibility: visibilityStatus}}>
                     <thead className="titleRow">
                         <tr>
                             <th scope="col">ID</th>
-                            <th scope="col">Cause</th>
-                            <th scope="col">Amount of Days</th>
-                            <th scope="col">Start Date</th>
-                            <th scope="col">Pacient</th>
-                            <th scope="col">Code</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">Result</th>
+                            <th scope="col">Isolation</th>
                             <th scope="col"></th>
                             <th scope="col"></th>
                         </tr>
@@ -363,14 +355,14 @@ export default function Isolations() {
                         </div>
                         <div className="modal-body">
                             <p id="errorEdit" className="errorTextTitle"></p><br></br>
-                            <a>Cause</a><br></br>
-                            <input className="form-control" value={cause} onChange = {(e) => {setCause(e.target.value); }}/><br></br>
-                            <a>Start Date</a><br></br>
-                            <input className="form-control" type="date" value={start} onChange = {(e) => {setStart(e.target.value); }}/><br></br>
-                            <a>Amount of Days</a><br></br>
-                            <input className="form-control" value={amount} onChange = {(e) => {setAmount(e.target.value); }}/><br></br>
-                            <a>Pacient</a><br></br>
-                            <input className="form-control" value={pacient} onChange = {(e) => {setPacient(e.target.value); }}/><br></br>
+                            <a>Date</a><br></br>
+                            <input className="form-control" type="date" value={date} onChange = {(e) => {setDate(e.target.value); }}/><br></br>
+                            <a>Type</a><br></br>
+                            <input className="form-control" value={type} onChange = {(e) => {setType(e.target.value); }}/><br></br>
+                            <a>Result</a><br></br>
+                            <input className="form-control" value={result} onChange = {(e) => {setResult(e.target.value); }}/><br></br>
+                            <a>Isolation</a><br></br>
+                            <input className="form-control" value={isolation} onChange = {(e) => {setIsolation(e.target.value); }}/><br></br>
                         </div>
                         <div className="modal-footer">
                             <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -383,21 +375,21 @@ export default function Isolations() {
                 <div className="modal-dialog" role="document">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h5 className="modal-title" id="createModalLabel">Create new Isolation</h5>
+                            <h5 className="modal-title" id="createModalLabel">Create new Test</h5>
                             <button type="button" className="btn floatButton" data-bs-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div className="modal-body">
                         <p id="errorCreate" className="errorTextTitle"></p><br></br>
-                            <a>Cause</a><br></br>
-                            <input className="form-control" value={cause} onChange = {(e) => {setCause(e.target.value); }}/><br></br>
-                            <a>Start Date</a><br></br>
-                            <input className="form-control" type="date" value={start} onChange = {(e) => {setStart(e.target.value); }}/><br></br>
-                            <a>Amount of Days</a><br></br>
-                            <input className="form-control" value={amount} onChange = {(e) => {setAmount(e.target.value); }}/><br></br>
-                            <a>Pacient</a><br></br>
-                            <input className="form-control" value={pacient} onChange = {(e) => {setPacient(e.target.value); }}/><br></br>
+                            <a>Date</a><br></br>
+                            <input className="form-control" type="date" value={date} onChange = {(e) => {setDate(e.target.value); }}/><br></br>
+                            <a>Type</a><br></br>
+                            <input className="form-control" value={type} onChange = {(e) => {setType(e.target.value); }}/><br></br>
+                            <a>Result</a><br></br>
+                            <input className="form-control" value={result} onChange = {(e) => {setResult(e.target.value); }}/><br></br>
+                            <a>Isolation</a><br></br>
+                            <input className="form-control" value={isolation} onChange = {(e) => {setIsolation(e.target.value); }}/><br></br>
                         </div>
                         <div className="modal-footer">
                             <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -410,18 +402,18 @@ export default function Isolations() {
                 <div className="modal-dialog" role="document">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h5 className="modal-title" id="deleteModalLabel">Delete the Isolation</h5>
+                            <h5 className="modal-title" id="deleteModalLabel">Delete the Test</h5>
                             <button type="button" className="btn floatButton" data-bs-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div className="modal-body">
                             <p id="errorDelete" className="errorTextTitle"></p><br></br>
-                            <a>Are you sure you want to delete the isolation?</a><br></br>
+                            <a>Are you sure you want to delete the test?</a><br></br>
                         </div>
                         <div className="modal-footer">
                             <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" className="btn floatButton" onClick={() => DeleteIsolation()}>Delete</button>
+                            <button type="button" className="btn floatButton" onClick={() => DeleteTest()}>Delete</button>
                         </div>
                     </div>
                 </div>

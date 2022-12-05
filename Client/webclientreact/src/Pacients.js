@@ -24,15 +24,25 @@ export default function Pacients() {
     const [phoneEdit, setPhoneEdit] = useState([]);
     const [addressEdit, setAddressEdit] = useState([]);
     const [doctorEdit, setDoctorEdit] = useState([]);
+    const [ownVisibleStatus, setOwnVisibleStatus] = useState([]);
+    const [loading, setLoading] = useState([]);
 
     useEffect(() => {
+        setLoading(false);
         setVisibilityStatus("hidden");
         if(sessionStorage.getItem("token") === null) {
             navigate("/");
         }
+        if(sessionStorage.getItem("admin") === null){
+            setOwnVisibleStatus("visible");
+        }
+        else{
+            setOwnVisibleStatus("hidden");
+        }
     }, []);
 
     function saveEdit(){
+        setLoading(true);
         let json = {};
         if(identificationEdit != identification){
             json["identificationCode"] = identification;
@@ -59,6 +69,9 @@ export default function Pacients() {
         {
             json = JSON.stringify(json)
             fetchEdit(json);
+        }
+        else{
+            setLoading(false);
         }
     }
 
@@ -96,6 +109,7 @@ export default function Pacients() {
         {
             window.location.reload(true);
         }
+        setLoading(false);
     }
     
     function afterFetchEdit(res){
@@ -108,6 +122,7 @@ export default function Pacients() {
         {
             window.location.reload(true);
         }
+        setLoading(false);
     }
 
     async function fetchGetOwn(){
@@ -168,7 +183,7 @@ export default function Pacients() {
             }
             setVisibilityStatus("visible");
         }
-
+        setLoading(false);
     }
 
     function createRow(pacient, i){
@@ -216,6 +231,7 @@ export default function Pacients() {
     }
 
     function loadAll(){
+        setLoading(true);
         setVisibilityStatus("hidden");
         document.getElementById('errorLoad').textContent = "";
         document.getElementById('tableTitleText').textContent = "";
@@ -224,6 +240,7 @@ export default function Pacients() {
     }
 
     function loadOwn(){
+        setLoading(true);
         setVisibilityStatus("hidden");
         document.getElementById('errorLoad').textContent = "";
         document.getElementById('tableTitleText').textContent = "";
@@ -232,6 +249,7 @@ export default function Pacients() {
     }
 
     function loadById(){
+        setLoading(true);
         setVisibilityStatus("hidden");
         document.getElementById('errorLoad').textContent = "";
         document.getElementById('tableTitleText').textContent = "";
@@ -240,6 +258,7 @@ export default function Pacients() {
     }
 
     function create(){
+        setLoading(true);
         if(identification.length === 0 || name.length === 0 || surname.length === 0 || birthdate.length === 0 || phone.length === 0 || address.length === 0 || doctor.length === 0){
             let error = document.getElementById('errorCreate');
             error.textContent = "All fields should be filled!"
@@ -259,11 +278,17 @@ export default function Pacients() {
                 json = JSON.stringify(json)
                 fetchCreate(json);
             }
+            else{
+                setLoading(false);
+            }
         }
     }
 
     return (
         <>
+            {loading ? (<div className="loaderDiv">
+                <div className="spinner"></div>
+            </div>) : ("")}
             <nav className="navbar fixed-top navbar-expand-md navBar">
                 <a className="navbar-brand" href="/mainpage">
                     <Logo className='logoMedic'/>
@@ -292,7 +317,7 @@ export default function Pacients() {
                     <input className="form-control inputs inputLoad" type="text" size="20" placeholder="Pacient ID" onChange = {(e) => {setPacientID(e.target.value); }}/>
                     <Button className="btn-secondary loadButton" onClick={() => loadById()}>Load Pacient by Id</Button><br></br><br></br>                
                     <Button className="btn-secondary loadButton" onClick={() => loadAll()}>Load All Pacients</Button><br></br>
-                    <Button className="btn-secondary loadButton" onClick={() => loadOwn()}>Load Own Pacients</Button><br></br><br></br>
+                    <Button className="btn-secondary loadButton" style={{visibility: ownVisibleStatus}} onClick={() => loadOwn()}>Load Own Pacients</Button><br></br><br></br>
                     <Button className="btn-secondary loadButton" data-bs-toggle="modal" data-bs-target = "#createModal">Create new Pacient</Button>
                 </div>
                 
@@ -383,6 +408,9 @@ export default function Pacients() {
                     </div>
                 </div>
             </div>
+            <footer className="footerLogin">
+                <p>Copyright © 2022</p>
+            </footer>
         </>
     )
 }

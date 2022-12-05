@@ -9,6 +9,12 @@ export default function MainPage() {
         if(sessionStorage.getItem("token") === null) {
             navigate("/");
         }
+        if(sessionStorage.getItem("admin") !== null){
+            document.getElementById("welcomeBack").textContent += "Admin";
+        }
+        else{
+            document.getElementById("welcomeBack").textContent += "Doctor";
+        }
     }, []);
 
     return (
@@ -34,6 +40,19 @@ export default function MainPage() {
                     </div>
                 </div>
             </nav>
+            <br></br><br></br><br></br><br></br><br></br>
+            <div id="welcomeBack" className="welcomeBack"><b>Welcome back, </b></div>
+            <br></br><br></br>
+            <div className="welcomeBack"><b>What's new?</b></div>
+            <br></br>
+            <p className="update"><b>UPDATE 2.0v:</b></p>
+            <p className="update">New functionality to Doctors</p>
+            <p className="update">Isolations tab to work with Isolations</p>
+            <p className="update">Tests tab to work with Tests</p>
+            <p className="update">Pacients tab to work with Pacients</p>
+            <footer className="footerLogin">
+                <p>Copyright © 2022</p>
+            </footer>
         </>
     )
 }

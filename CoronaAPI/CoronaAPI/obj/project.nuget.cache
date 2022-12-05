@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "vgwg3g14motjCcrcRC6MMYFMQwLKNiQWTxZLQ/LKCHZHHO5Psf+v2GNruMSar6chk40Ow/zBm7OGOFIkcZhWSw==",
+  "dgSpecHash": "KFrUAR8gZZH9whNMIgXyY3cdE5RC14AYGq5FMIfY+nvDdzY7i/jNQR4w1QF/whkeHS0+UnB7YChAbk64mnsYfA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\MANTAS\\Desktop\\Korona\\CoronaAPI\\CoronaAPI\\CoronaAPI.csproj",
+  "projectFilePath": "C:\\Users\\MANTAS\\Desktop\\KoronaClone\\CoronaAPI\\CoronaAPI\\CoronaAPI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\MANTAS\\.nuget\\packages\\google.protobuf\\3.19.4\\google.protobuf.3.19.4.nupkg.sha512",
     "C:\\Users\\MANTAS\\.nuget\\packages\\k4os.compression.lz4\\1.2.6\\k4os.compression.lz4.1.2.6.nupkg.sha512",
