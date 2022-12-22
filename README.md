@@ -56,6 +56,7 @@ Sistemos sudedamosios dalys:
 -	Serverio pusė – naudojant ASP.NET.
 -	Duomenų bazė – MySQL ( MariaDB )
 
+![image](https://user-images.githubusercontent.com/78092109/209148635-2c45dad3-22fc-4d3e-b148-a22acab798d4.png)
 <p align="center">1 pav. </p>
 
 ## API aprašas
@@ -491,3 +492,10 @@ Sistemos sudedamosios dalys:
     #### Realizacija:
     ![image](https://user-images.githubusercontent.com/78092109/209144794-e93275dd-f10e-4c4b-8f55-fde6caa464a4.png)
     <p align="center">17 pav. </p>
+    
+## Išvados
+- Šiame modulyje realizuodamas koronos pacientų valdymo sistemą, pagilinau savo žinias kurdamas:
+    - duomenų bazę
+    - API .NET aplinkoje
+    - svetainę naudojant React. 
+- Susipažinau su Azure debesų technologija.
