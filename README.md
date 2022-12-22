@@ -498,4 +498,4 @@ Sistemos sudedamosios dalys:
     - duomenų bazę
     - API .NET aplinkoje
     - svetainę naudojant React. 
-- Susipažinau su Azure debesų technologija.
+- Susipažinau ir išmokau naudotis Azure debesų technologija
