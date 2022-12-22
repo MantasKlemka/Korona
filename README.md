@@ -56,12 +56,12 @@ Sistemos sudedamosios dalys:
 -	Serverio pusė – naudojant ASP.NET.
 -	Duomenų bazė – MySQL ( MariaDB )
 
-1 pav.
+<p align="center">1 pav. </p>
 
 ## API aprašas
 
-- ## Daktaro endpointai:
-    ### **GET**       /api/Doctor/All
+- ### Daktaro endpointai:
+    #### **GET**       /api/Doctor/All
     **Paskirtis:** gražinti visų daktarų sąrašą <br>
     **Sėkmingo atsakymo kodas:** 200 <br>
     **Galimi nesėkmingo atsakymo kodai:** 400, 401 <br>
@@ -79,7 +79,7 @@ Sistemos sudedamosios dalys:
     }</pre>
     
     -------
-     ### **POST**      /api/Doctor
+     #### **POST**      /api/Doctor
      **Paskirtis:** sukurti daktaro paskyrą <br>
      **Sėkmingo atsakymo kodas:** 200 <br>
      **Galimi nesėkmingo atsakymo kodai:** 400 <br>
@@ -91,7 +91,7 @@ Sistemos sudedamosios dalys:
     </pre>
     -------
     
-    ### **PUT**       /api/Doctor/Activate/{id}
+    #### **PUT**       /api/Doctor/Activate/{id}
      **Paskirtis:** aktyvuoti daktaro paskyrą <br>
      **Sėkmingo atsakymo kodas:** 200 <br>
      **Galimi nesėkmingo atsakymo kodai:** 400, 401, 304 <br>
@@ -102,7 +102,7 @@ Sistemos sudedamosios dalys:
      Doctor (164) activated
      </pre>
     -------
-    ### **DELETE**    /api/Doctor/{id}
+    #### **DELETE**    /api/Doctor/{id}
      **Paskirtis:** ištrinti daktaro paskyrą <br>
      **Sėkmingo atsakymo kodas:** 200 <br>
      **Galimi nesėkmingo atsakymo kodai:** 400, 401 <br>
@@ -113,7 +113,7 @@ Sistemos sudedamosios dalys:
      Doctor (164) deleted
      </pre>
     -------
-    ### **GET**       /api/Doctor/{doctorID}/Pacients
+    #### **GET**       /api/Doctor/{doctorID}/Pacients
      **Paskirtis:** gauti visų daktaro pacientų sąrašą <br>
      **Sėkmingo atsakymo kodas:** 200 <br>
      **Galimi nesėkmingo atsakymo kodai:** 400, 401 <br>
@@ -131,8 +131,8 @@ Sistemos sudedamosios dalys:
     }
      </pre>
 
-- ## Paciento endpointai:
-    ### **GET**       /api/Pacient/All
+- ### Paciento endpointai:
+    #### **GET**       /api/Pacient/All
      **Paskirtis:** gauti visų pacientų sąrašą <br>
      **Sėkmingo atsakymo kodas:** 200 <br>
      **Galimi nesėkmingo atsakymo kodai:** 400, 401 <br>
@@ -152,7 +152,7 @@ Sistemos sudedamosios dalys:
      }
      </pre>
      -------
-    ### **POST**      /api/Pacient
+    #### **POST**      /api/Pacient
      **Paskirtis:** sukurti naują pacientą <br>
      **Sėkmingo atsakymo kodas:** 200 <br>
      **Galimi nesėkmingo atsakymo kodai:** 400, 401 <br>
@@ -163,7 +163,7 @@ Sistemos sudedamosios dalys:
      Pacient Tamas Tomasiunas (542112151) created
      </pre>
      -------
-    ### **GET**       /api/Pacient/{id}
+    #### **GET**       /api/Pacient/{id}
      **Paskirtis:** gauti paciento informaciją <br>
      **Sėkmingo atsakymo kodas:** 200 <br>
      **Galimi nesėkmingo atsakymo kodai:** 400, 401 <br>
@@ -183,7 +183,7 @@ Sistemos sudedamosios dalys:
      }
      </pre>
      -------
-     ###  **PUT**       /api/Pacient/{id}
+     ####  **PUT**       /api/Pacient/{id}
      **Paskirtis:** paredaguoti paciento informaciją <br>
      **Sėkmingo atsakymo kodas:** 200 <br>
      **Galimi nesėkmingo atsakymo kodai:** 400, 401, 304 <br>
@@ -194,7 +194,7 @@ Sistemos sudedamosios dalys:
      Pacient (11) updated
      </pre>
      -------
-     ### **DELETE**    /api/Pacient/{id}
+     #### **DELETE**    /api/Pacient/{id}
      **Paskirtis:** ištrinti pacientą <br>
      **Sėkmingo atsakymo kodas:** 200 <br>
      **Galimi nesėkmingo atsakymo kodai:** 400, 401 <br>
@@ -205,7 +205,7 @@ Sistemos sudedamosios dalys:
      Pacient (49) deleted
      </pre>
      -------
-    ###  **GET**       /api/Pacient/{pacientID}/Isolations
+    ####  **GET**       /api/Pacient/{pacientID}/Isolations
      **Paskirtis:** gauti visų paciento izoliacijų sąrašą <br>
      **Sėkmingo atsakymo kodas:** 200 <br>
      **Galimi nesėkmingo atsakymo kodai:** 400, 401 <br>
@@ -222,8 +222,8 @@ Sistemos sudedamosios dalys:
         "code": "1222111111"
      }
      </pre>
-- ## Izoliacijos endpointai
-    ### **GET**       /api/Isolation/All
+- ### Izoliacijos endpointai:
+    #### **GET**       /api/Isolation/All
      **Paskirtis:** gauti visų izoliacijų sąrašą <br>
      **Sėkmingo atsakymo kodas:** 200 <br>
      **Galimi nesėkmingo atsakymo kodai:** 400, 401 <br>
@@ -241,7 +241,7 @@ Sistemos sudedamosios dalys:
      }
      </pre>
     -------
-    ### **POST**      /api/Isolation/
+    #### **POST**      /api/Isolation/
      **Paskirtis:** sukurti naują izoliaciją <br>
      **Sėkmingo atsakymo kodas:** 200 <br>
      **Galimi nesėkmingo atsakymo kodai:** 400, 401 <br>
@@ -252,7 +252,7 @@ Sistemos sudedamosios dalys:
      Isolation (9) created
      </pre>
     -------
-    ### **GET**       /api/Isolation/{id}
+    #### **GET**       /api/Isolation/{id}
      **Paskirtis:** gauti izoliacijos informaciją <br>
      **Sėkmingo atsakymo kodas:** 200 <br>
      **Galimi nesėkmingo atsakymo kodai:** 400, 401 <br>
@@ -270,7 +270,7 @@ Sistemos sudedamosios dalys:
      }
      </pre>
     -------
-    ### **PUT**       /api/Isolation/{id}
+    #### **PUT**       /api/Isolation/{id}
      **Paskirtis:** redaguoti izoliacijos informaciją <br>
      **Sėkmingo atsakymo kodas:** 200 <br>
      **Galimi nesėkmingo atsakymo kodai:** 400, 401, 304 <br>
@@ -281,7 +281,7 @@ Sistemos sudedamosios dalys:
      Isolation (9) updated
      </pre>
     -------
-    ### **DELETE**    /api/Isolation/{id}
+    #### **DELETE**    /api/Isolation/{id}
      **Paskirtis:** ištrinti izoliaciją <br>
      **Sėkmingo atsakymo kodas:** 200 <br>
      **Galimi nesėkmingo atsakymo kodai:** 400, 401 <br>
@@ -292,7 +292,7 @@ Sistemos sudedamosios dalys:
      Isolation (9) deleted
      </pre>
     -------
-    ### **GET**       /api/Isolation/{isolationID}/Tests
+    #### **GET**       /api/Isolation/{isolationID}/Tests
      **Paskirtis:** gauti visų izoliacijos testų sąrašą <br>
      **Sėkmingo atsakymo kodas:** 200 <br>
      **Galimi nesėkmingo atsakymo kodai:** 400, 401 <br>
@@ -309,7 +309,7 @@ Sistemos sudedamosios dalys:
      }
      </pre>
     -------
-    ### **GET**       /api/Isolation/Check/{isolationCode}
+    #### **GET**       /api/Isolation/Check/{isolationCode}
      **Paskirtis:** gauti izoliacijos informaciją <br>
      **Sėkmingo atsakymo kodas:** 200 <br>
      **Galimi nesėkmingo atsakymo kodai:** 400 <br>
@@ -324,8 +324,8 @@ Sistemos sudedamosios dalys:
      }
      </pre>
     
-- ## Testo endpointai:
-    ### **GET**       /api/Test/All
+- ### Testo endpointai:
+    #### **GET**       /api/Test/All
      **Paskirtis:** gauti visų testų sąrašą <br>
      **Sėkmingo atsakymo kodas:** 200 <br>
      **Galimi nesėkmingo atsakymo kodai:** 400, 401 <br>
@@ -342,7 +342,7 @@ Sistemos sudedamosios dalys:
      }
      </pre>
     -------
-    ### **POST**      /api/Test/
+    #### **POST**      /api/Test/
      **Paskirtis:** sukurti naują testą <br>
      **Sėkmingo atsakymo kodas:** 200 <br>
      **Galimi nesėkmingo atsakymo kodai:** 400, 401 <br>
@@ -353,7 +353,7 @@ Sistemos sudedamosios dalys:
      Test (5) created
      </pre>
     -------
-    ### **GET**       /api/Test/{id}
+    #### **GET**       /api/Test/{id}
      **Paskirtis:** gauti testo informaciją <br>
      **Sėkmingo atsakymo kodas:** 200 <br>
      **Galimi nesėkmingo atsakymo kodai:** 400, 401 <br>
@@ -370,7 +370,7 @@ Sistemos sudedamosios dalys:
      }
      </pre>
     -------
-    ### **PUT**       /api/Test/{id}
+    #### **PUT**       /api/Test/{id}
      **Paskirtis:** redaguoti testo informaciją <br>
      **Sėkmingo atsakymo kodas:** 200 <br>
      **Galimi nesėkmingo atsakymo kodai:** 400, 401, 304 <br>
@@ -381,7 +381,7 @@ Sistemos sudedamosios dalys:
      Test (5) updated
      </pre>
     -------
-    ### **DELETE**    /api/Test/{id}
+    #### **DELETE**    /api/Test/{id}
      **Paskirtis:** ištrinti testą <br>
      **Sėkmingo atsakymo kodas:** 200 <br>
      **Galimi nesėkmingo atsakymo kodai:** 400, 401 <br>
@@ -393,8 +393,8 @@ Sistemos sudedamosios dalys:
      </pre>
     -------
     
-- Pagrindinio lango:
-    ### **POST**      /api/Main/Login
+- ### Pagrindinio lango endpointai:
+    #### **POST**      /api/Main/Login
      **Paskirtis:** prisijungti prie sistemos <br>
      **Sėkmingo atsakymo kodas:** 200 <br>
      **Galimi nesėkmingo atsakymo kodai:** 400 <br>
@@ -404,3 +404,90 @@ Sistemos sudedamosios dalys:
      <pre>
      Berear eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJwb3BhcyIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluaXN0cmF0b3IiLCJqdGkiOiI2MjE1MjA0MS1mMDFkLTQ5ODMtYjczMi1hZjEwOTQ1MDQwYzAiLCJleHAiOjE2NzE3MjE4NTQsImlzcyI6Ik1hbnRhc0tsZW1rYSIsImF1ZCI6Ik1hbnRhc0tsZW1rYSJ9.DYnmPr8eKBhGrpQf9-e9nagpcFC8K9XUg3H3iASlMG0
      </pre>
+     
+## Projektuojamos sąsajos langų wireframe`ai bei realizaciją
+- ### Pagrindinis langas
+    #### Wireframe:
+    ![image](https://user-images.githubusercontent.com/78092109/209142735-5ec05277-5097-4c56-9c26-9a982324aef2.png)
+    <p align="center">2 pav. </p>
+    
+    #### Realizacija:
+    ![image](https://user-images.githubusercontent.com/78092109/209143082-9725177a-2ea5-4848-b67c-3b4872add684.png)
+    <p align="center">3 pav. </p>
+    
+    -------
+    
+- ### Prisijungimo langas
+    #### Wireframe:
+    ![image](https://user-images.githubusercontent.com/78092109/209143231-721818e4-06ed-44ea-8aa8-bbf368ffc54d.png)
+    <p align="center">4 pav. </p>
+    
+    #### Realizacija:
+    ![image](https://user-images.githubusercontent.com/78092109/209143269-b33b2edf-3b51-429c-a4ef-ef461530e9fb.png)
+    <p align="center">5 pav. </p>
+    
+     -------
+     
+- ### Registracijos langas
+    #### Wireframe:
+    ![image](https://user-images.githubusercontent.com/78092109/209143699-d53f99e0-3f15-4171-b9c2-e8dbabd39b52.png)
+    <p align="center">6 pav. </p>
+    
+    #### Realizacija:
+    ![image](https://user-images.githubusercontent.com/78092109/209143757-130edb92-1e38-4f2d-8be1-e0c1c674ccc2.png)
+    <p align="center">7 pav. </p>
+    
+     -------
+     
+- ### Pagrindinis sistemos langas
+    #### Wireframe:
+    ![image](https://user-images.githubusercontent.com/78092109/209143865-bac921ba-680b-4f75-85ef-d4e2fcf9d1dc.png)
+    <p align="center">8 pav. </p>
+    
+    #### Realizacija:
+    ![image](https://user-images.githubusercontent.com/78092109/209143929-8d9a2e84-838d-492b-ac82-e2ee5f7b69ca.png)
+    <p align="center">9 pav. </p>
+    
+     -------
+     
+- ### Daktarų sistemos langas
+    #### Wireframe:
+    ![image](https://user-images.githubusercontent.com/78092109/209144166-21b13ef6-5a35-4d48-86b5-d4fbb3355860.png)
+    <p align="center">10 pav. </p>
+    
+    #### Realizacija:
+    ![image](https://user-images.githubusercontent.com/78092109/209144214-853baeef-6ba7-4c7c-9e8e-bb5c86e03e9b.png)
+    <p align="center">11 pav. </p>
+    
+     -------
+     
+- ### Pacientų sistemos langas
+    #### Wireframe:
+    ![image](https://user-images.githubusercontent.com/78092109/209144259-1cd1c36c-74f9-4441-a65e-76aaf94d10c1.png)
+    <p align="center">12 pav. </p>
+    
+    #### Realizacija:
+    ![image](https://user-images.githubusercontent.com/78092109/209144484-1f34c261-bd1e-4633-b319-833ccb0d56b1.png)
+    <p align="center">13 pav. </p>
+    
+     -------
+     
+- ### Izoliacijų sistemos langas
+    #### Wireframe:
+    ![image](https://user-images.githubusercontent.com/78092109/209144555-a53e5525-b946-4f20-9bf7-0fa382c300af.png)
+    <p align="center">14 pav. </p>
+    
+    #### Realizacija:
+    ![image](https://user-images.githubusercontent.com/78092109/209144631-4125eec6-955d-4772-96d0-98b6bd36fa46.png)
+    <p align="center">15 pav. </p>
+    
+     -------
+     
+- ### Testų sistemos langas
+    #### Wireframe:
+    ![image](https://user-images.githubusercontent.com/78092109/209144711-07c87932-421a-464c-a99f-af142cf76290.png)
+    <p align="center">16 pav. </p>
+    
+    #### Realizacija:
+    ![image](https://user-images.githubusercontent.com/78092109/209144794-e93275dd-f10e-4c4b-8f55-fde6caa464a4.png)
+    <p align="center">17 pav. </p>
