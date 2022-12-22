@@ -2,7 +2,7 @@
 
 ## Sistemos paskirtis 
 Projekto tikslas – sukurti sistemą, kuri lengvintu Koronos viruso užsikrėtusių asmenų registraciją bei stebėjimą.
-Veikimo principas – kuriamą platformą sudaro dvi dalys: internetinė aplikacija, kuria naudosis gydytojai, neregistruotas sistemos naudotojas ( pacientas ) ir administratorius bei aplikacijų programavimo sąsaja. Gydytojas, norėdamas naudotis šia platforma, prie jos prisiregistruos ir po sėkmingo paskyros sukūrimo, prisijungs. Prisijungęs gydytojas gali užregistruoti naujus pacientus, pacientam paskirti izoliaciją, parinkti izoliacijos tipą. Gydytojas, gali matyti visus esamus pacientus arba visus savo užregistruotus pacientus. Neprisijungęs vartotojas gali peržiūrėti asmens izoliacijos informaciją, pateikus asmens kodą pagrindiniame puslapyje. Administratorius turės galimybę patvirtinti gydytojų registracijas, bei ištrinti paskyras.
+Veikimo principas – kuriamą platformą sudaro dvi dalys: internetinė aplikacija, kuria naudosis gydytojai, neregistruotas sistemos naudotojas ( pacientas ) ir administratorius bei aplikacijų programavimo sąsaja. Gydytojas, norėdamas naudotis šia platforma, prie jos prisiregistruos ir po sėkmingo paskyros sukūrimo, prisijungs. Prisijungęs gydytojas gali užregistruoti naujus pacientus, pacientam paskirti izoliaciją, parinkti izoliacijos tipą. Gydytojas, gali matyti visus esamus pacientus arba visus savo užregistruotus pacientus. Neprisijungęs vartotojas gali peržiūrėti asmens izoliacijos informaciją, pateikus izoliacijos kodą pagrindiniame puslapyje. Administratorius turės prieigą prie viso sistemos funkcionalumo, bei papildomą galimybę patvirtinti gydytojų registracijas, bei ištrinti jų paskyras.
 
 ## Funkciniai reikalavimai 
 **Sistemos naudotojai:**
@@ -60,33 +60,347 @@ Sistemos sudedamosios dalys:
 
 ## API aprašas
 
-Endpoints:
-- Doctor
-    - **GET**       /api/Doctor/All
-    - **POST**      /api/Doctor/
-    - **PUT**       /api/Doctor/Activate/{personalCode}
-    - **DELETE**    /api/Doctor/{personalCode}
+- ## Daktaro endpointai:
+    ### **GET**       /api/Doctor/All
+    **Paskirtis:** gražinti visų daktarų sąrašą <br>
+    **Sėkmingo atsakymo kodas:** 200 <br>
+    **Galimi nesėkmingo atsakymo kodai:** 400, 401 <br>
+    **Autorizuoti vartotojai:** administratorius, daktaras <br>
+    
+    **Užklausos sėkmingo atsakymo pavyzdys:**
+    <pre>
+    {
+        "id": 150,
+        "email": "gytux@gmail.com",
+        "name": "Gytis",
+        "surname": "Stankevicius",
+        "password": "123456789",
+        "activated": true
+    }</pre>
+    
+    -------
+     ### **POST**      /api/Doctor
+     **Paskirtis:** sukurti daktaro paskyrą <br>
+     **Sėkmingo atsakymo kodas:** 200 <br>
+     **Galimi nesėkmingo atsakymo kodai:** 400 <br>
+     **Autorizuoti vartotojai:** neregistruotas vartotojas<br>
+     
+    **Užklausos sėkmingo atsakymo pavyzdys:** 
+    <pre>
+    Doctor Gytis Stankevicius (gytusx@gmail.com) created
+    </pre>
+    -------
+    
+    ### **PUT**       /api/Doctor/Activate/{id}
+     **Paskirtis:** aktyvuoti daktaro paskyrą <br>
+     **Sėkmingo atsakymo kodas:** 200 <br>
+     **Galimi nesėkmingo atsakymo kodai:** 400, 401, 304 <br>
+     **Autorizuoti vartotojai:** administratorius <br>
+     
+     **Užklausos sėkmingo atsakymo pavyzdys:** 
+     <pre>
+     Doctor (164) activated
+     </pre>
+    -------
+    ### **DELETE**    /api/Doctor/{id}
+     **Paskirtis:** ištrinti daktaro paskyrą <br>
+     **Sėkmingo atsakymo kodas:** 200 <br>
+     **Galimi nesėkmingo atsakymo kodai:** 400, 401 <br>
+     **Autorizuoti vartotojai:** administratorius <br>
+     
+     **Užklausos sėkmingo atsakymo pavyzdys:** 
+     <pre>
+     Doctor (164) deleted
+     </pre>
+    -------
+    ### **GET**       /api/Doctor/{doctorID}/Pacients
+     **Paskirtis:** gauti visų daktaro pacientų sąrašą <br>
+     **Sėkmingo atsakymo kodas:** 200 <br>
+     **Galimi nesėkmingo atsakymo kodai:** 400, 401 <br>
+     **Autorizuoti vartotojai:** administratorius, daktaras <br>
+     
+     **Užklausos sėkmingo atsakymo pavyzdys:** 
+     <pre>
+     {
+        "id": 150,
+        "email": "gytux@gmail.com",
+        "name": "Gytis",
+        "surname": "Stankevicius",
+        "password": "123456789",
+        "activated": true
+    }
+     </pre>
 
-- Pacient
-    - **GET**       /api/Pacient/All/
-    - **POST**      /api/Pacient/
-    - **GET**       /api/Pacient/{personalCode}
-    - **PUT**       /api/Pacient/{personalCode}
-    - **DELETE**    /api/Pacient/{personalCode}
-    - **GET**       /api/Pacient/All/{personalCode}
+- ## Paciento endpointai:
+    ### **GET**       /api/Pacient/All
+     **Paskirtis:** gauti visų pacientų sąrašą <br>
+     **Sėkmingo atsakymo kodas:** 200 <br>
+     **Galimi nesėkmingo atsakymo kodai:** 400, 401 <br>
+     **Autorizuoti vartotojai:** administratorius, daktaras <br>
+     
+     **Užklausos sėkmingo atsakymo pavyzdys:** 
+     <pre>
+     {
+        "id": 11,
+        "identificationCode": "54212151",
+        "name": "Tamas",
+        "surname": "Tomasiunas",
+        "birthDate": "12/15/1992",
+        "phoneNumber": "+37062485839",
+        "address": "Ilgenu g. 11, Vilnius",
+        "doctor": 150
+     }
+     </pre>
+     -------
+    ### **POST**      /api/Pacient
+     **Paskirtis:** sukurti naują pacientą <br>
+     **Sėkmingo atsakymo kodas:** 200 <br>
+     **Galimi nesėkmingo atsakymo kodai:** 400, 401 <br>
+     **Autorizuoti vartotojai:** administratorius, daktaras <br>
+     
+     **Užklausos sėkmingo atsakymo pavyzdys:** 
+     <pre>
+     Pacient Tamas Tomasiunas (542112151) created
+     </pre>
+     -------
+    ### **GET**       /api/Pacient/{id}
+     **Paskirtis:** gauti paciento informaciją <br>
+     **Sėkmingo atsakymo kodas:** 200 <br>
+     **Galimi nesėkmingo atsakymo kodai:** 400, 401 <br>
+     **Autorizuoti vartotojai:** administratorius, daktaras <br>
+     
+     **Užklausos sėkmingo atsakymo pavyzdys:** 
+     <pre>
+     {
+        "id": 11,
+        "identificationCode": "54212151",
+        "name": "Tamas",
+        "surname": "Tomasiunas",
+        "birthDate": "12/15/1992",
+        "phoneNumber": "+37062485839",
+        "address": "Ilgenu g. 11, Vilnius",
+        "doctor": 150
+     }
+     </pre>
+     -------
+     ###  **PUT**       /api/Pacient/{id}
+     **Paskirtis:** paredaguoti paciento informaciją <br>
+     **Sėkmingo atsakymo kodas:** 200 <br>
+     **Galimi nesėkmingo atsakymo kodai:** 400, 401, 304 <br>
+     **Autorizuoti vartotojai:** administratorius, daktaras <br>
+     
+     **Užklausos sėkmingo atsakymo pavyzdys:** 
+     <pre>
+     Pacient (11) updated
+     </pre>
+     -------
+     ### **DELETE**    /api/Pacient/{id}
+     **Paskirtis:** ištrinti pacientą <br>
+     **Sėkmingo atsakymo kodas:** 200 <br>
+     **Galimi nesėkmingo atsakymo kodai:** 400, 401 <br>
+     **Autorizuoti vartotojai:** administratorius, daktaras <br>
+     
+     **Užklausos sėkmingo atsakymo pavyzdys:** 
+     <pre>
+     Pacient (49) deleted
+     </pre>
+     -------
+    ###  **GET**       /api/Pacient/{pacientID}/Isolations
+     **Paskirtis:** gauti visų paciento izoliacijų sąrašą <br>
+     **Sėkmingo atsakymo kodas:** 200 <br>
+     **Galimi nesėkmingo atsakymo kodai:** 400, 401 <br>
+     **Autorizuoti vartotojai:** administratorius, daktaras <br>
+     
+     **Užklausos sėkmingo atsakymo pavyzdys:** 
+     <pre>
+     {
+        "id": 9,
+        "cause": "Diagnosed with COVID-11",
+        "startDate": "10/7/2022",
+        "amountOfDays": 8,
+        "pacient": 12,
+        "code": "1222111111"
+     }
+     </pre>
+- ## Izoliacijos endpointai
+    ### **GET**       /api/Isolation/All
+     **Paskirtis:** gauti visų izoliacijų sąrašą <br>
+     **Sėkmingo atsakymo kodas:** 200 <br>
+     **Galimi nesėkmingo atsakymo kodai:** 400, 401 <br>
+     **Autorizuoti vartotojai:** administratorius, daktaras <br>
+     
+     **Užklausos sėkmingo atsakymo pavyzdys:** 
+     <pre>
+     {
+        "id": 9,
+        "cause": "Diagnosed with COVID-11",
+        "startDate": "10/7/2022",
+        "amountOfDays": 8,
+        "pacient": 12,
+        "code": "1222111111"
+     }
+     </pre>
+    -------
+    ### **POST**      /api/Isolation/
+     **Paskirtis:** sukurti naują izoliaciją <br>
+     **Sėkmingo atsakymo kodas:** 200 <br>
+     **Galimi nesėkmingo atsakymo kodai:** 400, 401 <br>
+     **Autorizuoti vartotojai:** administratorius, daktaras <br>
+     
+     **Užklausos sėkmingo atsakymo pavyzdys:** 
+     <pre>
+     Isolation (9) created
+     </pre>
+    -------
+    ### **GET**       /api/Isolation/{id}
+     **Paskirtis:** gauti izoliacijos informaciją <br>
+     **Sėkmingo atsakymo kodas:** 200 <br>
+     **Galimi nesėkmingo atsakymo kodai:** 400, 401 <br>
+     **Autorizuoti vartotojai:** administratorius, daktaras <br>
+     
+     **Užklausos sėkmingo atsakymo pavyzdys:** 
+     <pre>
+     {
+        "id": 9,
+        "cause": "Diagnosed with COVID-11",
+        "startDate": "10/7/2022",
+        "amountOfDays": 8,
+        "pacient": 12,
+        "code": "1222111111"
+     }
+     </pre>
+    -------
+    ### **PUT**       /api/Isolation/{id}
+     **Paskirtis:** redaguoti izoliacijos informaciją <br>
+     **Sėkmingo atsakymo kodas:** 200 <br>
+     **Galimi nesėkmingo atsakymo kodai:** 400, 401, 304 <br>
+     **Autorizuoti vartotojai:** administratorius, daktaras <br>
+     
+     **Užklausos sėkmingo atsakymo pavyzdys:** 
+     <pre>
+     Isolation (9) updated
+     </pre>
+    -------
+    ### **DELETE**    /api/Isolation/{id}
+     **Paskirtis:** ištrinti izoliaciją <br>
+     **Sėkmingo atsakymo kodas:** 200 <br>
+     **Galimi nesėkmingo atsakymo kodai:** 400, 401 <br>
+     **Autorizuoti vartotojai:** administratorius, daktaras <br>
+     
+     **Užklausos sėkmingo atsakymo pavyzdys:** 
+     <pre>
+     Isolation (9) deleted
+     </pre>
+    -------
+    ### **GET**       /api/Isolation/{isolationID}/Tests
+     **Paskirtis:** gauti visų izoliacijos testų sąrašą <br>
+     **Sėkmingo atsakymo kodas:** 200 <br>
+     **Galimi nesėkmingo atsakymo kodai:** 400, 401 <br>
+     **Autorizuoti vartotojai:** administratorius, daktaras <br>
+     
+     **Užklausos sėkmingo atsakymo pavyzdys:** 
+     <pre>
+     {
+        "id": 5,
+        "date": "10/9/2022",
+        "type": "SELF TEST",
+        "result": "NEGATIVE",
+        "isolation": 9
+     }
+     </pre>
+    -------
+    ### **GET**       /api/Isolation/Check/{isolationCode}
+     **Paskirtis:** gauti izoliacijos informaciją <br>
+     **Sėkmingo atsakymo kodas:** 200 <br>
+     **Galimi nesėkmingo atsakymo kodai:** 400 <br>
+     **Autorizuoti vartotojai:** neregistruotas vartotojas <br>
+     
+     **Užklausos sėkmingo atsakymo pavyzdys:** 
+     <pre>
+     {
+          "Cause": "Diagnosed with COVID-11",
+          "StartDate": "10/7/2022",
+          "AmountOfDays": 8
+     }
+     </pre>
     
-- Isolation
-    - **GET**       /api/Isolation/All
-    - **GET**       /api/Isolation/All/{personalCode}
-    - **POST**      /api/Isolation/
-    - **GET**       /api/Isolation/{isolationID}
-    - **PUT**       /api/Isolation/{isolationID}
-    - **DELETE**    /api/Isolation/{isolationID}
+- ## Testo endpointai:
+    ### **GET**       /api/Test/All
+     **Paskirtis:** gauti visų testų sąrašą <br>
+     **Sėkmingo atsakymo kodas:** 200 <br>
+     **Galimi nesėkmingo atsakymo kodai:** 400, 401 <br>
+     **Autorizuoti vartotojai:** administratorius, daktaras <br>
+     
+     **Užklausos sėkmingo atsakymo pavyzdys:** 
+     <pre>
+     {
+        "id": 5,
+        "date": "10/9/2022",
+        "type": "SELF TEST",
+        "result": "NEGATIVE",
+        "isolation": 9
+     }
+     </pre>
+    -------
+    ### **POST**      /api/Test/
+     **Paskirtis:** sukurti naują testą <br>
+     **Sėkmingo atsakymo kodas:** 200 <br>
+     **Galimi nesėkmingo atsakymo kodai:** 400, 401 <br>
+     **Autorizuoti vartotojai:** administratorius, daktaras <br>
+     
+     **Užklausos sėkmingo atsakymo pavyzdys:** 
+     <pre>
+     Test (5) created
+     </pre>
+    -------
+    ### **GET**       /api/Test/{id}
+     **Paskirtis:** gauti testo informaciją <br>
+     **Sėkmingo atsakymo kodas:** 200 <br>
+     **Galimi nesėkmingo atsakymo kodai:** 400, 401 <br>
+     **Autorizuoti vartotojai:** administratorius, daktaras <br>
+     
+     **Užklausos sėkmingo atsakymo pavyzdys:** 
+     <pre>
+     {
+        "id": 5,
+        "date": "10/9/2022",
+        "type": "SELF TEST",
+        "result": "NEGATIVE",
+        "isolation": 9
+     }
+     </pre>
+    -------
+    ### **PUT**       /api/Test/{id}
+     **Paskirtis:** redaguoti testo informaciją <br>
+     **Sėkmingo atsakymo kodas:** 200 <br>
+     **Galimi nesėkmingo atsakymo kodai:** 400, 401, 304 <br>
+     **Autorizuoti vartotojai:** administratorius, daktaras <br>
+     
+     **Užklausos sėkmingo atsakymo pavyzdys:** 
+     <pre>
+     Test (5) updated
+     </pre>
+    -------
+    ### **DELETE**    /api/Test/{id}
+     **Paskirtis:** ištrinti testą <br>
+     **Sėkmingo atsakymo kodas:** 200 <br>
+     **Galimi nesėkmingo atsakymo kodai:** 400, 401 <br>
+     **Autorizuoti vartotojai:** administratorius, daktaras <br>
+     
+     **Užklausos sėkmingo atsakymo pavyzdys:** 
+     <pre>
+     Test (5) deleted
+     </pre>
+    -------
     
-- Test
-    - **GET**       /api/Test/All
-    - **GET**       /api/Test/All/{isolationID}
-    - **POST**      /api/Test/
-    - **GET**       /api/Test/{testID}
-    - **PUT**       /api/Test/testID
-    - **DELETE**    /api/Test/testID
+- Pagrindinio lango:
+    ### **POST**      /api/Main/Login
+     **Paskirtis:** prisijungti prie sistemos <br>
+     **Sėkmingo atsakymo kodas:** 200 <br>
+     **Galimi nesėkmingo atsakymo kodai:** 400 <br>
+     **Autorizuoti vartotojai:** neregistruotas vartotojas <br>
+     
+     **Užklausos sėkmingo atsakymo pavyzdys:** 
+     <pre>
+     Berear eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJwb3BhcyIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluaXN0cmF0b3IiLCJqdGkiOiI2MjE1MjA0MS1mMDFkLTQ5ODMtYjczMi1hZjEwOTQ1MDQwYzAiLCJleHAiOjE2NzE3MjE4NTQsImlzcyI6Ik1hbnRhc0tsZW1rYSIsImF1ZCI6Ik1hbnRhc0tsZW1rYSJ9.DYnmPr8eKBhGrpQf9-e9nagpcFC8K9XUg3H3iASlMG0
+     </pre>
